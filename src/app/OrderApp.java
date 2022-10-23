@@ -22,7 +22,7 @@ public class OrderApp {
         Product[] products = productRepository.getAllProducts();
         Menu menu = new Menu(products);
         Cart cart = new Cart(menu, productRepository);
-        Order order = new Order(discount);
+        Order order = new Order(cart, discount);
         boolean isOrdered = false;
 
         System.out.println("🍔 BurgerQueen Order Service");
@@ -32,7 +32,7 @@ public class OrderApp {
 
             String input = scanner.nextLine();
 
-            if (input.equals("+")) isOrdered = order.makeOrder(cart);
+            if (input.equals("+")) isOrdered = order.makeOrder();
             else {
                 int menuNumber = Integer.parseInt(input);
 

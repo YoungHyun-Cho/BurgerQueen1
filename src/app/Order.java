@@ -5,9 +5,10 @@ import app.discount.Discount;
 public class Order {
     private Cart cart;
     private Discount discount;
-    private int price;
+    private int finalPrice;
 
-    public Order(Discount discount) {
+    public Order(Cart cart, Discount discount) {
+        this.cart = cart;
         this.discount = discount;
     }
 
@@ -15,14 +16,14 @@ public class Order {
         this.cart = cart;
     }
 
-    public boolean makeOrder(Cart cart) {
+    public boolean makeOrder() {
 
         setCart(cart);
 
         discount.checkAllDiscountConditions();
 
-        int priceBeforeDiscount = cart.getTotalPrice();
-        int discountedPrice = discount.discount(priceBeforeDiscount);
+        int totalPrice = cart.getTotalPrice();
+        finalPrice = discount.discount(totalPrice);
 
         System.out.println("[📣] 주문이 완료되었습니다. ");
         System.out.println("[📣] 주문 내역은 다음과 같습니다. ");
@@ -31,8 +32,8 @@ public class Order {
         cart.printDetails();
 
         System.out.println("-".repeat(60));
-        System.out.printf("금액 합계      : %d원\n", priceBeforeDiscount);
-        System.out.printf("할인 적용 금액 : %d원\n", discountedPrice);
+        System.out.printf("금액 합계      : %d원\n", totalPrice);
+        System.out.printf("할인 적용 금액 : %d원\n", finalPrice);
 
         return true;
     }
