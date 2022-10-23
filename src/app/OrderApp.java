@@ -1,36 +1,46 @@
 package app;
 
-import app.product.InMemoryProductRepository;
-import app.product.Product;
+import app.discount.Discount;
 import app.product.ProductRepository;
+import app.product.Product;
 
 import java.util.Scanner;
 
 public class OrderApp {
 
-    private Scanner scanner = new Scanner(System.in);
-    private ProductRepository productRepository;
-    private Product[] products = productRepository.getAllProducts();
-    private Menu menu = new Menu(products);
-    private Cart cart = new Cart(menu, productRepository);
+    private Discount discount;
 
-    public OrderApp(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public OrderApp(Discount discount) {
+        this.discount = discount;
     }
 
     public void start() {
+
+        Scanner scanner = new Scanner(System.in);
+
+        ProductRepository productRepository = new ProductRepository();
+        Product[] products = productRepository.getAllProducts();
+        Menu menu = new Menu(products);
+        Cart cart = new Cart(menu, productRepository);
+        Order order = new Order(discount);
+        boolean isOrdered = false;
 
         System.out.println("🍔 BurgerQueen Order Service");
 
         while (true) {
             menu.printMenu();
 
-            int input = Integer.parseInt(scanner.nextLine());
+            String input = scanner.nextLine();
 
-            if (input == 0) cart.printCart();
-            else if (1 <= input && input <= products.length) cart.addToCart(input);
+            if (input.equals("+")) isOrdered = order.makeOrder(cart);
+            else {
+                int menuNumber = Integer.parseInt(input);
 
-            if (cart.isOrdered()) break;
+                if (menuNumber == 0) cart.printCart();
+                else if (1 <= menuNumber && menuNumber <= products.length) cart.addToCart(menuNumber);
+            }
+
+            if (isOrdered) break;
         }
     }
 }

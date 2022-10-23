@@ -3,25 +3,23 @@ package app.product.subproduct;
 import app.product.Product;
 
 public class Drink extends Product {
-    private boolean straw;
+    private boolean hasStraw;
 
-    public Drink(int id, String name, int price, int kcal, boolean straw) {
+    public Drink(int id, String name, int price, int kcal, boolean hasStraw) {
         super(id, name, price, kcal);
-        this.straw = straw;
+        this.hasStraw = hasStraw;
+    }
+
+    public Drink(Drink drink) {
+        super(drink.getName(), drink.getPrice(), drink.getKcal());
+        this.hasStraw = drink.hasStraw();
     }
 
     public boolean hasStraw() {
-        return straw;
+        return hasStraw;
     }
 
-    public void setStraw(boolean straw) {
-        this.straw = straw;
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() + "Drink{" +
-                "straw=" + straw +
-                '}';
+    public void setHasStraw(boolean hasStraw) {
+        this.hasStraw = hasStraw;
     }
 }

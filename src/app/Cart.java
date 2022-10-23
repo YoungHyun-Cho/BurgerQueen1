@@ -1,7 +1,7 @@
 package app;
 
-import app.product.Product;
 import app.product.ProductRepository;
+import app.product.Product;
 import app.product.subproduct.BurgerSet;
 import app.product.subproduct.Drink;
 import app.product.subproduct.Hamburger;
@@ -14,20 +14,37 @@ public class Cart {
     private Scanner scanner = new Scanner(System.in);
     private Product[] items = new Product[0];
     private Menu menu;
-
     private ProductRepository productRepository;
-    private boolean ordered = false;
 
     public Cart(Menu menu, ProductRepository productRepository) {
         this.menu = menu;
         this.productRepository = productRepository;
     }
 
-    public boolean isOrdered() {
-        return ordered;
+    public void addToCart(int productId) {
+        Product product = productRepository.getProduct(productId);
+        chooseOption(product);
+
+        if (product instanceof Hamburger) {
+            Hamburger hamburger = (Hamburger) product;
+            if (hamburger.isBurgerSet()) product = composeSet(hamburger);
+        }
+
+        Product newProduct;
+
+        if (product instanceof Hamburger) newProduct = new Hamburger((Hamburger) product);
+        else if (product instanceof Side) newProduct = new Side((Side) product);
+        else if (product instanceof Drink) newProduct = new Drink((Drink) product);
+        else newProduct = new BurgerSet((BurgerSet) product);
+
+        Product[] newItems = new Product[items.length + 1];
+        System.arraycopy(items, 0, newItems, 0, items.length);
+        newItems[newItems.length - 1] = newProduct;
+        items = newItems;
+        System.out.printf("[📣] %s를(을) 장바구니에 담았습니다.\n", product.getName());
     }
 
-    public void chooseOption(Product product) {
+    private void chooseOption(Product product) {
 
         String input;
 
@@ -38,7 +55,7 @@ public class Cart {
                     ((Hamburger) product).getBurgerSetPrice()
             );
             input = scanner.nextLine();
-            if (input.equals("2")) ((Hamburger) product).setBurgerSet(true);
+            if (input.equals("2")) ((Hamburger) product).setIsBurgerSet(true);
         }
         else if (product instanceof Side) {
             System.out.println("케첩은 몇개가 필요하신가요?");
@@ -48,28 +65,12 @@ public class Cart {
         else if (product instanceof Drink) {
             System.out.println("빨대가 필요하신가요? (1)_예 (2)_아니오");
             input = scanner.nextLine();
-            if (input.equals("2")) ((Drink) product).setStraw(false);
+            if (input.equals("2")) ((Drink) product).setHasStraw(false);
         }
     }
 
-    public void addToCart(int productId) {
-        Product newItem = productRepository.getProduct(productId);
-        chooseOption(newItem);
 
-        if (newItem instanceof Hamburger) {
-            Hamburger hamburger = (Hamburger) newItem;
-            if (hamburger.isBurgerSet()) newItem = composeSet(hamburger);
-        }
-
-        Product[] newItems = new Product[items.length + 1];
-        System.arraycopy(items, 0, newItems, 0, items.length);
-        newItems[newItems.length - 1] = newItem;
-        items = newItems;
-        System.out.printf("[📣] %s를(을) 장바구니에 담았습니다.\n", newItem.getName());
-    }
-
-
-    public BurgerSet composeSet(Hamburger hamburger) {
+    private BurgerSet composeSet(Hamburger hamburger) {
         System.out.println("사이드를 골라주세요");
         menu.printSides(true);
 
@@ -98,10 +99,8 @@ public class Cart {
         System.out.println("-".repeat(60));
         System.out.printf("합계 : %d원\n", getTotalPrice());
 
-        System.out.println("(1)_이전으로 (2)_주문하기");
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
-        if (input.equals("2")) makeOrder();
+        System.out.println("이전으로 돌아가려면 엔터를 누르세요. ");
+        scanner.nextLine();
     }
 
     public void printDetails() {
@@ -143,17 +142,6 @@ public class Cart {
                 );
             }
         }
-    }
-
-    public void makeOrder() {
-
-        System.out.println("[📣] 주문이 완료되었습니다. ");
-        System.out.println("[📣] 주문 내역은 다음과 같습니다. ");
-        System.out.println("-".repeat(60));
-        printDetails();
-        System.out.println("-".repeat(60));
-        System.out.printf("합계 : %d원\n\n", getTotalPrice());
-        ordered = true;
     }
 
     public int getTotalPrice() {
