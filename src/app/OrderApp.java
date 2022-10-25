@@ -23,7 +23,6 @@ public class OrderApp {
         Menu menu = new Menu(products);
         Cart cart = new Cart(menu, productRepository);
         Order order = new Order(cart, discount);
-        boolean isOrdered = false;
 
         System.out.println("🍔 BurgerQueen Order Service");
 
@@ -32,15 +31,18 @@ public class OrderApp {
 
             String input = scanner.nextLine();
 
-            if (input.equals("+")) isOrdered = order.makeOrder();
+            if (input.equals("+")) {
+                order.makeOrder();
+                break;
+            }
             else {
                 int menuNumber = Integer.parseInt(input);
 
                 if (menuNumber == 0) cart.printCart();
                 else if (1 <= menuNumber && menuNumber <= products.length) cart.addToCart(menuNumber);
             }
-
-            if (isOrdered) break;
         }
+
+        System.out.println("이용해주셔서 감사합니다. ");
     }
 }

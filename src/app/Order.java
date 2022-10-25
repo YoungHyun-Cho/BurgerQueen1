@@ -16,7 +16,7 @@ public class Order {
         this.cart = cart;
     }
 
-    public boolean makeOrder() {
+    public void makeOrder() {
 
         setCart(cart);
 
@@ -34,7 +34,5 @@ public class Order {
         System.out.println("-".repeat(60));
         System.out.printf("금액 합계      : %d원\n", totalPrice);
         System.out.printf("할인 적용 금액 : %d원\n", finalPrice);
-
-        return true;
     }
 }
