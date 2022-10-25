@@ -23,11 +23,10 @@ public class Menu {
 
         System.out.println();
         System.out.println("🧺 (0) 장바구니");
+        System.out.println("📦 (+) 주문하기");
         System.out.println("-".repeat(60));
         System.out.print("[📣] 메뉴를 선택해주세요 : ");
     }
-
-
 
     public void printHamburgers(boolean isBurgerSet) {
         System.out.println("🍔 햄버거");
@@ -54,23 +53,7 @@ public class Menu {
     }
 
     private static void printEachMenu(Product product, boolean isBurgerSet) {
-
-        if (isBurgerSet) {
-            System.out.printf(
-                    "   (%d) %s %5dKcal\n",
-                    product.getId(),
-                    product.getName(),
-                    product.getKcal()
-            );
-        }
-        else {
-            System.out.printf(
-                    "   (%d) %s %5dKcal %5d원\n",
-                    product.getId(),
-                    product.getName(),
-                    product.getKcal(),
-                    product.getPrice()
-            );
-        }
+        if (isBurgerSet) System.out.printf("   (%d) %s %5dKcal\n", product.getId(), product.getName(), product.getKcal());
+        else System.out.printf("   (%d) %s %5dKcal %5d원\n", product.getId(), product.getName(), product.getKcal(), product.getPrice());
     }
 }

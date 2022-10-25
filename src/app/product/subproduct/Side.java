@@ -10,18 +10,16 @@ public class Side extends Product {
         this.ketchup = ketchup;
     }
 
+    public Side(Side side) {
+        super(side.getName(), side.getPrice(), side.getKcal());
+        this.ketchup = side.getKetchup();
+    }
+
     public int getKetchup() {
         return ketchup;
     }
 
     public void setKetchup(int ketchup) {
         this.ketchup = ketchup;
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() + "Side{" +
-                "ketchup=" + ketchup +
-                '}';
     }
 }

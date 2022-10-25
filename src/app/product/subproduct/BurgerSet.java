@@ -14,19 +14,19 @@ public class BurgerSet extends Product {
         this.drink = drink;
     }
 
-    public Side getSide() {
-        return side;
+    public BurgerSet(BurgerSet burgerSet) {
+        super(burgerSet.getName(), burgerSet.getPrice(), burgerSet.getKcal());
+        this.hamburger = new Hamburger(burgerSet.hamburger);
+        this.side = new Side(burgerSet.side);
+        this.drink = new Drink(burgerSet.drink);
     }
 
-    public void setSide(Side side) {
-        this.side = side;
+    public Side getSide() {
+        return side;
     }
 
     public Drink getDrink() {
         return drink;
     }
 
-    public void setDrink(Drink drink) {
-        this.drink = drink;
-    }
 }
